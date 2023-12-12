@@ -1,38 +1,83 @@
-# models/base_model.py
-import uuid
+# tests/test_base_model.py
+
+import unittest
+from models.base_model import BaseModel
 from datetime import datetime
 
-class BaseModel:
-    def __init__(self, *args, **kwargs):
-        """Initializer"""
-        if kwargs:
-            for attr, value in kwargs.items():
-                if attr != "__class__":
-                    if attr in ["created_at", "updated_at"]:
-                        dformat = "%Y-%m-%dT%H:%M:%S.%f"
-                        setattr(self, attr, datetime.strptime(value, dformat))
-                    else:
-                        setattr(self, attr, value)
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+class TestBaseModel(unittest.TestCase):
 
-    def __str__(self):
-        """Human readable representation"""
-        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+    def test_instance_creation(self):
+        """Test instance creation."""
+        instance = BaseModel()
+        self.assertIsInstance(instance, BaseModel)
 
-    def save(self):
-        """Update the last modification date"""
-        self.updated_at = datetime.now()
+    def test_instance_creation_id_type(self):
+        """Test instance creation + id type."""
+        instance = BaseModel()
+        self.assertTrue(isinstance(instance.id, str))
 
-    def to_dict(self):
-        """Returns a dictionary containing all keys/values
-        of __dict__ of the instance.
-        """
-        new_dict = self.__dict__.copy()
-        new_dict.update(created_at=self.created_at.isoformat())
-        new_dict.update(updated_at=self.updated_at.isoformat())
-        new_dict.update(__class__=self.__class__.__name__)
-        return new_dict
+    def test_instance_creation_created_at_type(self):
+        """Test instance creation + created_at type."""
+        instance = BaseModel()
+        self.assertTrue(isinstance(instance.created_at, datetime))
+
+    def test_instances_creation_different_id(self):
+        """Test 2 instances creation + id different."""
+        instance1 = BaseModel()
+        instance2 = BaseModel()
+        self.assertNotEqual(instance1.id, instance2.id)
+
+    def test_instance_creation_str_implementation(self):
+        """Test instance creation + __str__ implementation."""
+        instance = BaseModel()
+        expected_str = "[BaseModel] ({}) {}".format(instance.id, str(instance.__dict__))
+        self.assertEqual(str(instance), expected_str)
+
+    def test_instance_creation_to_dict(self):
+        """Test instance creation + to_dict()."""
+        instance = BaseModel()
+        expected_dict = {
+            'id': instance.id,
+            'created_at': instance.created_at.isoformat(),
+            'updated_at': instance.updated_at.isoformat(),
+        }
+        self.assertEqual(instance.to_dict(), expected_dict)
+
+    def test_instance_creation_save_updated_at_type(self):
+        """Test instance creation + save() + updated_at type."""
+        instance = BaseModel()
+        instance.save()
+        self.assertTrue(isinstance(instance.updated_at, datetime))
+
+    def test_base_model_save(self):
+        """Test BaseModel: save()."""
+        instance = BaseModel()
+        initial_updated_at = instance.updated_at
+        instance.save()
+        self.assertNotEqual(initial_updated_at, instance.updated_at)
+
+    def test_base_model_to_dict(self):
+        """Test BaseModel: to_dict()."""
+        instance = BaseModel()
+        expected_dict = {
+            'id': instance.id,
+            'created_at': instance.created_at.isoformat(),
+            'updated_at': instance.updated_at.isoformat(),
+        }
+        self.assertEqual(instance.to_dict(), expected_dict)
+
+    def test_base_model_self_id(self):
+        """Test BaseModel: self.id."""
+        instance = BaseModel()
+        self.assertTrue(hasattr(instance, 'id'))
+
+    def test_base_model_self_created_at(self):
+        """Test BaseModel: self.created_at."""
+        instance = BaseModel()
+        self.assertTrue(hasattr(instance, 'created_at'))
+
+    def test_base_model_str(self):
+        """Test BaseModel: __str__(self)."""
+        instance = BaseModel()
+        self.assertTrue(str(instance))
 
