@@ -1,5 +1,5 @@
-#!/usr/bin/python3
-'''This module contains the definition of the BaseModel class'''
+s module contains the definition of the BaseModel class
+'''
 
 import uuid
 import datetime
@@ -7,12 +7,22 @@ from models import storage
 
 class BaseModel:
     '''
-        class BaseModel that defines all common attributes/methods
-            for other classes
-    '''
+    Class BaseModel that defines all common attributes/methods
+    for other classes
 
+    Attributes:
+        id (str): A unique identifier for the instance.
+        created_at (datetime): The datetime when the instance is created.
+        updated_at (datetime): The datetime when the instance is updated.
+
+    Methods:
+        __init__: Initializes a new instance of the BaseModel class.
+        __str__: Returns a string representation of the BaseModel instance.
+        save: Updates the updated_at attribute and saves the instance.
+        to_dict: Returns a dictionary representation of the instance.
+    '''
     def __init__(self, *args, **kwargs):
-        ''' Public instance attributes '''
+        '''Public instance attributes'''
         if not kwargs:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
@@ -33,7 +43,7 @@ class BaseModel:
 
     def __str__(self):
         '''
-            Return a string that representation of BaseModel class
+        Return a string representation of BaseModel class
         '''
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__
@@ -41,16 +51,16 @@ class BaseModel:
     
     def save(self):
         '''
-            updates the public instance attribute updated_at
-                with the current datetime
+        Update the public instance attribute updated_at
+        with the current datetime and save the instance
         '''
         self.updated_at = datetime.datetime.now()
         storage.save()
 
     def to_dict(self):
         '''
-            returns a dictionary containing all keys/values
-              of __dict__ of the instance
+        Return a dictionary containing all keys/values
+        of __dict__ of the instance
         '''
         dct_instance = self.__dict__.copy()
         dct_instance['__class__'] = self.__class__.__name__
