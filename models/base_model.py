@@ -1,4 +1,6 @@
-s module contains the definition of the BaseModel class
+#!/usr/bin/python3
+'''
+    This module contains the definition of the BaseModel class
 '''
 
 import uuid
@@ -67,4 +69,3 @@ class BaseModel:
         dct_instance['created_at'] = self.created_at.isoformat()
         dct_instance['updated_at'] = self.updated_at.isoformat()
         return dct_instance
-
