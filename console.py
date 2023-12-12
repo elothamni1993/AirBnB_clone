@@ -1,4 +1,5 @@
- the HBnB console."""
+#!/usr/bin/python3
+"""the HBnB console."""
 import cmd
 import re
 from shlex import split
