@@ -1,5 +1,5 @@
 .filters {
-display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -48,3 +48,4 @@ display: flex;
 .popover li:hover {
     background-color: #DDDDDD;
 }
+
